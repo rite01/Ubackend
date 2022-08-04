@@ -9,7 +9,11 @@ const productSchema = new mongoose.Schema({
     url: { type: String, require: true },
   },
   courseTitle: { type: String, require: true },
-  courseAuther: { type: String, require: true },
+  courseAuther: {
+    type: mongoose.Schema.Types.ObjectId,
+    require: true,
+    ref: "user",
+  },
   avg_rating: { type: Number, require: true },
   price: { type: Number, require: true },
   updateDate: { type: String, require: true },

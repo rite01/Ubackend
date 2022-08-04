@@ -30,7 +30,7 @@ exports.productCreate = async (req, res, _) => {
       productDiscription,
       courseTitle,
       image: { public_id: result.public_id, url: result.secure_url },
-      courseAuther,
+      courseAuther: req.user.id,
       avg_rating,
       price,
       updateDate,
@@ -55,7 +55,7 @@ exports.productCreate = async (req, res, _) => {
 //Get product Api
 exports.getProduct = async (req, res, _) => {
   try {
-    const productList = await Product.find({});
+    const productList = await Product.find({}).populate("courseAuther");
     if (productList.length === 0) {
       return res
         .status(HttpMessageCode.BAD_REQUEST)
@@ -83,7 +83,7 @@ exports.getProductByTitle = async (req, res, _) => {
 //Get Single Product
 exports.getSingleProduct = async (req, res, _) => {
   const _id = req.params.id;
-  const data = await Product.findOne({ id: _id });
+  const data = await Product.findOne({ _id }).populate("courseAuther");
   return res.status(HttpMessageCode.OK).json({
     statusCode: HttpMessageCode.OK,
     message: HttpMessage.GET_SINGLE_PRODUCT,

@@ -14,6 +14,10 @@ const Routes = {
     DELETEPRODUCT: "/delete/product/:id",
     UPDATEPRODUCT: "/update/product/:id",
   },
+  CART: {
+    DEFAULT: "/",
+    ADDTOCART: "/addcart",
+  },
 };
 
 module.exports = { Routes };

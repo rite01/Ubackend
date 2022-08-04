@@ -10,14 +10,14 @@ const {
   updateProduct,
   getProductByTitle,
 } = require("../controller/product");
-// const { verifyToken } = require("../middelwere/authCheck");
+const { verifyToken } = require("../middelwere/authCheck");
 const { uploadFile } = require("../services/multer");
 const { productValidation } = require("../validations");
 
 //Product Route
 productRoute.post(
   PRODUCT.POSTCREATE,
-  // verifyToken,
+  verifyToken,
   uploadFile,
   productValidation,
   productCreate
