@@ -17,6 +17,8 @@ const Routes = {
   CART: {
     DEFAULT: "/",
     ADDTOCART: "/addcart",
+    GETCART: "/getcart",
+    REMOVECART:"/removecart/:id"
   },
 };
 

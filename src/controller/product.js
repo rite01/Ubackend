@@ -11,7 +11,6 @@ exports.productCreate = async (req, res, _) => {
       productTitle,
       productDiscription,
       courseTitle,
-      courseAuther,
       avg_rating,
       price,
       updateDate,
@@ -71,67 +70,80 @@ exports.getProduct = async (req, res, _) => {
 
 //Get Product By Title
 exports.getProductByTitle = async (req, res, _) => {
-  const navTitle = req.params.navtitle;
-  const data = await Product.find({ navTitle });
-  return res.status(HttpMessageCode.OK).json({
-    statusCode: HttpMessageCode.OK,
-    message: `Product List ${navTitle}`,
-    data,
-  });
+  try {
+    const navTitle = req.params.navtitle;
+    const data = await Product.find({ navTitle });
+    return res.status(HttpMessageCode.OK).json({
+      statusCode: HttpMessageCode.OK,
+      message: `Product List ${navTitle}`,
+      data,
+    });
+  } catch (error) {
+    res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
+  }
 };
 
 //Get Single Product
 exports.getSingleProduct = async (req, res, _) => {
-  const _id = req.params.id;
-  const data = await Product.findOne({ _id }).populate("courseAuther");
-  return res.status(HttpMessageCode.OK).json({
-    statusCode: HttpMessageCode.OK,
-    message: HttpMessage.GET_SINGLE_PRODUCT,
-    data,
-  });
+  try {
+    const _id = req.params.id;
+    const data = await Product.findOne({ _id }).populate("courseAuther");
+    return res.status(HttpMessageCode.OK).json({
+      statusCode: HttpMessageCode.OK,
+      message: HttpMessage.GET_SINGLE_PRODUCT,
+      data,
+    });
+  } catch (error) {
+    res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
+  }
 };
 
 //update Product
 exports.updateProduct = async (req, res, _) => {
-  const _id = req.params.id;
-  const data = await Product.findByIdAndUpdate(
-    req.params.id,
-    {
-      navTitle: req.body.navTitle,
-      productTitle: req.body.productTitle,
-      productDiscription: req.body.productDiscription,
-      courseTitle: req.body.courseTitle,
-      image: req.body.image,
-      courseAuther: req.body.courseAuther,
-      avg_rating: req.body.avg_rating,
-      price: req.body.price,
-      updateDate: req.body.updateDate,
-      hours: req.body.hours,
-      courseSummry: req.body.courseSummry,
-      aboutProduct: req.body.aboutProduct,
-      bestSeller: req.body.bestSeller,
-      numReview: req.body.numReview,
-    },
-    { new: true }
-  );
-  if (!data) {
-    return res.status(404).send({
-      message: "Product not found with id " + _id,
-    });
+  try {
+    const _id = req.params.id;
+    const data = await Product.findByIdAndUpdate(
+      req.params.id,
+      {
+        navTitle: req.body.navTitle,
+        productTitle: req.body.productTitle,
+        productDiscription: req.body.productDiscription,
+        courseTitle: req.body.courseTitle,
+        image: req.body.image,
+        courseAuther: req.body.courseAuther,
+        avg_rating: req.body.avg_rating,
+        price: req.body.price,
+        updateDate: req.body.updateDate,
+        hours: req.body.hours,
+        courseSummry: req.body.courseSummry,
+        aboutProduct: req.body.aboutProduct,
+        bestSeller: req.body.bestSeller,
+        numReview: req.body.numReview,
+      },
+      { new: true }
+    );
+    if (!data) {
+      return res.status(HttpMessageCode.BAD_REQUEST).send({
+        message: HttpMessage.PRODUCT_NOT_FOUND + _id,
+      });
+    }
+    res.send(data);
+  } catch (error) {
+    res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
   }
-  res.send(data);
-  // res.status(201).json({
-  //   message: "Thing updated successfully!",
-  // });
 };
 
 //Delete Product Api
 exports.deleteProduct = async (req, res, _) => {
-  const _id = req.params.id;
-  const data = await Product.findOneAndDelete({ id: _id });
-  return res.status(HttpMessageCode.OK).json({
-    statusCode: HttpMessageCode.OK,
-    message: HttpMessage.DELETE_SINGLE_PRODUCT,
-    data,
-  });
+  try {
+    const _id = req.params.id;
+    const data = await Product.findOneAndDelete({ id: _id });
+    return res.status(HttpMessageCode.OK).json({
+      statusCode: HttpMessageCode.OK,
+      message: HttpMessage.DELETE_SINGLE_PRODUCT,
+      data,
+    });
+  } catch (error) {
+    res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
+  }
 };

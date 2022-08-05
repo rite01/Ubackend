@@ -15,6 +15,12 @@ const HttpMessage = {
   GET_SINGLE_PRODUCT: "Get Single Product",
   GET_PRODUCT_BY_TITLE: "Product List",
   DELETE_SINGLE_PRODUCT: "Delete product SuccessFully",
+  POST_ADD_ALREADY: "Posts has been already added",
+  PLEASE_ADD_PRODUCT: "Please Add",
+  ADD_PRODUCT_SUCCESSFULLY: "added to cart successfully",
+  NO_CART: "there is no cart of user",
+  NO_DATA_FOUND_FROM_THIS_ID: "no cart details found with this id ",
+  PRODUCT_NOT_FOUND:"product not found"
 };
 
 module.exports = { HttpMessage };

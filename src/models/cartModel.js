@@ -13,7 +13,6 @@ const cartSchema = new mongoose.Schema(
 const Cart = mongoose.model("cart", cartSchema);
 module.exports = { Cart };
 
-
 // let Str = '123456789123'
 // let vis = Str.slice(-4)
 // console.log(vis)
