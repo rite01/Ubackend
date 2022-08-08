@@ -20,12 +20,12 @@ exports.registerHandler = async (req, res, _) => {
     const hashPassword = await bcrypt.hash(req.body.password, salt);
 
     await new User({ ...req.body, password: hashPassword }).save();
-    res
+    return res
       .status(HttpMessageCode.CREATED)
       .send({ message: HttpMessage.USER_REGISTER });
   } catch (error) {
     console.log(error);
-    res
+    return res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
       .send({ message: HttpMessage.INTERNAL_SERVER_ERROR });
   }
@@ -54,12 +54,12 @@ exports.loginHandler = async (req, res, _) => {
         .status(HttpMessageCode.UNAUTHORIZED)
         .json({ message: HttpMessage.INVALID_EMAIL });
     const token = user.generateAuthToken();
-    res
+    return res
       .status(HttpMessageCode.OK)
       .json({ data: token, message: HttpMessage.LOGIN_SUCCESSFULLY });
   } catch (error) {
     console.log(error);
-    res
+    return res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
       .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });
   }
@@ -79,6 +79,6 @@ exports.getUser = async (req, res, _) => {
         .json({ message: HttpMessage.USER_FOUND, data: userList });
   } catch (err) {
     console.log("err", err);
-    res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
+    return res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
   }
 };

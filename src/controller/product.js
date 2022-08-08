@@ -1,50 +1,54 @@
 const { Product } = require("../models/productModel");
 const { HttpMessage, HttpMessageCode } = require("../constants");
 const cloudinary = require("../services/clodinary");
+const { ProductDetail } = require("../models/productDetail");
 
 //create Product
 exports.productCreate = async (req, res, _) => {
   try {
     const image = req.file.path;
     const {
-      navTitle,
-      productTitle,
-      productDiscription,
-      courseTitle,
-      avg_rating,
+      Heading,
+      Title,
       price,
       updateDate,
+      bestSeller,
+      courseTitle,
+      Discription,
+      numReview,
       hours,
       courseSummry,
       aboutProduct,
-      bestSeller,
-      numReview,
     } = req.body;
-    const result = await cloudinary.uploader.upload(image, {
-      folder: "products",
-    });
-    const productCreate = new Product({
-      navTitle,
-      productTitle,
-      productDiscription,
-      courseTitle,
-      image: { public_id: result.public_id, url: result.secure_url },
+    const result = await cloudinary.uploader.upload(image);
+
+    const prodDetail = new ProductDetail({
       courseAuther: req.user.id,
-      avg_rating,
-      price,
-      updateDate,
+      courseTitle,
+      Discription,
+      numReview,
       hours,
       courseSummry,
-      aboutProduct,
       bestSeller,
-      numReview,
+      aboutProduct,
+    });
+    const test = await prodDetail.save();
+    const productCreate = new Product({
+      Heading,
+      Title,
+      image: { public_id: result.public_id, url: result.secure_url },
+      price,
+      updateDate,
+      bestSeller,
+      Detail: test.id,
     });
     await productCreate.save();
-    res.status(HttpMessageCode.CREATED).json({
+    return res.status(HttpMessageCode.CREATED).json({
       message: HttpMessage.PRODUCT_CREATED_SUCCESSFULLY,
       data: productCreate,
     });
   } catch (error) {
+    console.log(error);
     res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
       .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });
@@ -54,7 +58,7 @@ exports.productCreate = async (req, res, _) => {
 //Get product Api
 exports.getProduct = async (req, res, _) => {
   try {
-    const productList = await Product.find({}).populate("courseAuther");
+    const productList = await Product.find({}).populate("Detail");
     if (productList.length === 0) {
       return res
         .status(HttpMessageCode.BAD_REQUEST)
@@ -64,7 +68,7 @@ exports.getProduct = async (req, res, _) => {
         .status(HttpMessageCode.OK)
         .json({ message: HttpMessage.PRODUCT_FOUND, data: productList });
   } catch (err) {
-    res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
+    return res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
   }
 };
 

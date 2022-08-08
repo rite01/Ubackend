@@ -2,7 +2,6 @@ const { Cart } = require("../models/cartModel");
 const { Product } = require("../models/productModel");
 const { HttpMessage, HttpMessageCode } = require("../constants");
 
-//careate cart
 exports.addCart = async (req, res, _) => {
   try {
     const { id: userId } = req.user;
@@ -43,19 +42,15 @@ exports.addCart = async (req, res, _) => {
   }
 };
 
-//get cart product
 exports.getCartProduct = async (req, res, _) => {
   try {
-    const { productId } = req.body;
-    console.log("productId", productId);
     const cartData = await Cart.find({}).populate("productId");
-    res.status(HttpMessageCode.OK).json({ data: cartData });
+    return res.status(HttpMessageCode.OK).json({ cartData });
   } catch (err) {
-    res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
+    return res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
   }
 };
 
-//Delete cart
 exports.removeCart = async (req, res, _) => {
   try {
     const userId = req.user._id;
@@ -81,13 +76,12 @@ exports.removeCart = async (req, res, _) => {
     //   { $pull: { productId: _id } },
     //   { new: true }
     // );
-    console.log(updateData);
     return res.status(HttpMessageCode.OK).json({
       statusCode: HttpMessageCode.OK,
       message: HttpMessage.DELETE_SINGLE_PRODUCT,
       updateData,
     });
   } catch (error) {
-    res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
+    return res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
   }
 };
