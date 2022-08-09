@@ -69,13 +69,13 @@ exports.removeCart = async (req, res, _) => {
     }
     const removeItem = data.productId.find((element) => element != _id);
     data.productId = removeItem;
-    const updateData = await data.save();
 
     // const updateData = await Cart.findOneAndUpdate(
     //   { userId: userId },
     //   { $pull: { productId: _id } },
     //   { new: true }
     // );
+    const updateData = await data.save();
     return res.status(HttpMessageCode.OK).json({
       statusCode: HttpMessageCode.OK,
       message: HttpMessage.DELETE_SINGLE_PRODUCT,

@@ -7,6 +7,7 @@ const HttpMessage = {
   USER_REGISTER: "User Registration successfully",
   NO_DATA_FOUND: "there is no data",
   USER_FOUND: "user found",
+  USER_NOT_FOUND:"user not found",
   PRODUCT_FOUND: "product found",
   EMPTY_FIELDS: "Don't put email and password to be empty",
   MUST_BE_LOGIN: "you must be logged in",
@@ -20,7 +21,10 @@ const HttpMessage = {
   ADD_PRODUCT_SUCCESSFULLY: "added to cart successfully",
   NO_CART: "there is no cart of user",
   NO_DATA_FOUND_FROM_THIS_ID: "no cart details found with this id ",
-  PRODUCT_NOT_FOUND:"product not found"
+  PRODUCT_NOT_FOUND: "product not found",
+  UPDATE_SUCCESSFULLY: "Update product successfully",
+  USER_EMAIL_NOT_VERIFIED:
+    "Your Email has not been verified. Please click on resend",
 };
 
 module.exports = { HttpMessage };

@@ -2,6 +2,7 @@ const Routes = {
   AUTH: {
     DEFAULT: "/",
     REGISTER: "/register",
+    VERIFY: "/confirm/:confirmationCode",
     LOGIN: "/login",
     ALLUSER: "/alluser",
   },
@@ -18,7 +19,7 @@ const Routes = {
     DEFAULT: "/",
     ADDTOCART: "/addcart",
     GETCART: "/getcart",
-    REMOVECART:"/removecart/:id"
+    REMOVECART: "/removecart/:id",
   },
 };
 

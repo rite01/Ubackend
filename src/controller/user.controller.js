@@ -1,17 +1,15 @@
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const { HttpMessage, HttpMessageCode } = require("../constants");
+const config = require("../config/nodemail");
+var jwt = require("jsonwebtoken");
+const { sendMail } = require("../services/emailsend");
 
 //user Registration
 exports.registerHandler = async (req, res, _) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    const { fullName, email, password } = req.body;
-    if (!fullName || !email || !password) {
-      return res
-        .status(HttpMessageCode.SERVER_NOT_PROCEED)
-        .json({ error: HttpMessage.EMPTY_FIELDS });
-    }
+    const token = jwt.sign({ email: req.body.email }, config.secret);
     if (user)
       return res
         .status(HttpMessageCode.CONFLICT)
@@ -19,10 +17,17 @@ exports.registerHandler = async (req, res, _) => {
     const salt = await bcrypt.genSalt(Number(process.env.SALT));
     const hashPassword = await bcrypt.hash(req.body.password, salt);
 
-    await new User({ ...req.body, password: hashPassword }).save();
+    const data = await User({
+      fullName: req.body.fullName,
+      email: req.body.email,
+      password: hashPassword,
+      confirmationCode: token,
+    }).save();
+    const newCode = data.confirmationCode;
+    await sendMail(req.body.email, newCode);
     return res
       .status(HttpMessageCode.CREATED)
-      .send({ message: HttpMessage.USER_REGISTER });
+      .json({ data: data, message: HttpMessage.USER_REGISTER });
   } catch (error) {
     console.log(error);
     return res
@@ -31,15 +36,39 @@ exports.registerHandler = async (req, res, _) => {
   }
 };
 
+exports.verifyUser = async (req, res, next) => {
+  try {
+    const test = await User.findOne({
+      confirmationCode: req.params.confirmationCode,
+    });
+    if (!test) {
+      return res
+        .status(HttpMessageCode.NOT_FOUND)
+        .send({ message: HttpMessage.USER_NOT_FOUND });
+    }
+    test.isVerified = true;
+    await test.save();
+    return res.json({
+      statusCode: HttpMessageCode.CREATED,
+      message: HttpMessage.OK,
+      data: test,
+    });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
+      .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });
+  }
+};
+
 //Login Controller
 exports.loginHandler = async (req, res, _) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    const { email, password } = req.body;
-    if (!email || !password) {
-      return res
-        .status(HttpMessageCode.SERVER_NOT_PROCEED)
-        .json({ error: HttpMessage.EMPTY_FIELDS });
+    if (!user.isVerified) {
+      return res.status(HttpMessageCode.NOT_FOUND).send({
+        message: HttpMessage.USER_EMAIL_NOT_VERIFIED,
+      });
     }
     if (!user)
       return res

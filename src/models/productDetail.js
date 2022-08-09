@@ -10,7 +10,7 @@ const detailSchema = new mongoose.Schema({
     ref: "user",
   },
   courseTitle: { type: String, require: true },
-  Discription: { type: String, require: true },
+  discription: { type: String, require: true },
   numReview: { type: Number, require: true },
   hours: { type: Number, require: true },
   courseSummry: { type: String, require: true },

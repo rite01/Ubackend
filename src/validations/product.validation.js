@@ -2,13 +2,13 @@ const joi = require("joi");
 
 exports.productValidation = (req, res, next) => {
   const productSchema = joi.object({
-    Heading: joi.string().required().label("Heading"),
-    Title: joi.string().required().label("Product Title"),
+    heading: joi.string().required().label("Heading"),
+    title: joi.string().required().label("Product Title"),
     price: joi.number().required().label("Price"),
     updateDate: joi.number().required().label("Update Date"),
     bestSeller: joi.string().required().label("Best Seller"),
     courseTitle: joi.string().required().label("Course Title"),
-    Discription: joi.string().required().label("Product discription"),
+    discription: joi.string().required().label("Product discription"),
     courseAuther: joi.string().label("Course Auther"),
     numReview: joi.number().required().label("Avg Rating"),
     hours: joi.number().required().label("course Hours"),

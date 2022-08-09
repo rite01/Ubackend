@@ -8,24 +8,23 @@ exports.productCreate = async (req, res, _) => {
   try {
     const image = req.file.path;
     const {
-      Heading,
-      Title,
+      heading,
+      title,
       price,
       updateDate,
       bestSeller,
       courseTitle,
-      Discription,
+      discription,
       numReview,
       hours,
       courseSummry,
       aboutProduct,
     } = req.body;
     const result = await cloudinary.uploader.upload(image);
-
     const prodDetail = new ProductDetail({
       courseAuther: req.user.id,
       courseTitle,
-      Discription,
+      discription,
       numReview,
       hours,
       courseSummry,
@@ -34,13 +33,13 @@ exports.productCreate = async (req, res, _) => {
     });
     const test = await prodDetail.save();
     const productCreate = new Product({
-      Heading,
-      Title,
+      heading,
+      title,
       image: { public_id: result.public_id, url: result.secure_url },
       price,
       updateDate,
       bestSeller,
-      Detail: test.id,
+      detail: test.id,
     });
     await productCreate.save();
     return res.status(HttpMessageCode.CREATED).json({
@@ -49,7 +48,7 @@ exports.productCreate = async (req, res, _) => {
     });
   } catch (error) {
     console.log(error);
-    res
+    return res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
       .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });
   }
@@ -58,7 +57,7 @@ exports.productCreate = async (req, res, _) => {
 //Get product Api
 exports.getProduct = async (req, res, _) => {
   try {
-    const productList = await Product.find({}).populate("Detail");
+    const productList = await Product.find({}).populate("detail");
     if (productList.length === 0) {
       return res
         .status(HttpMessageCode.BAD_REQUEST)
@@ -76,53 +75,44 @@ exports.getProduct = async (req, res, _) => {
 exports.getProductByTitle = async (req, res, _) => {
   try {
     const navTitle = req.params.navtitle;
-    const data = await Product.find({ navTitle });
+    const data = await Product.find({ navTitle }).populate("detail");
     return res.status(HttpMessageCode.OK).json({
       statusCode: HttpMessageCode.OK,
       message: `Product List ${navTitle}`,
       data,
     });
   } catch (error) {
-    res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
+    return res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
   }
 };
 
 //Get Single Product
 exports.getSingleProduct = async (req, res, _) => {
   try {
-    const _id = req.params.id;
-    const data = await Product.findOne({ _id }).populate("courseAuther");
+    const id = req.params.id;
+    const data = await Product.findOne({ id }).populate("detail");
     return res.status(HttpMessageCode.OK).json({
       statusCode: HttpMessageCode.OK,
       message: HttpMessage.GET_SINGLE_PRODUCT,
       data,
     });
   } catch (error) {
-    res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
+    return res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
   }
 };
 
 //update Product
 exports.updateProduct = async (req, res, _) => {
   try {
-    const _id = req.params.id;
+    const id = req.params.id;
     const data = await Product.findByIdAndUpdate(
-      req.params.id,
+      id,
       {
-        navTitle: req.body.navTitle,
-        productTitle: req.body.productTitle,
-        productDiscription: req.body.productDiscription,
-        courseTitle: req.body.courseTitle,
-        image: req.body.image,
-        courseAuther: req.body.courseAuther,
-        avg_rating: req.body.avg_rating,
+        heading: req.body.heading,
+        title: req.body.title,
         price: req.body.price,
         updateDate: req.body.updateDate,
-        hours: req.body.hours,
-        courseSummry: req.body.courseSummry,
-        aboutProduct: req.body.aboutProduct,
         bestSeller: req.body.bestSeller,
-        numReview: req.body.numReview,
       },
       { new: true }
     );
@@ -131,9 +121,14 @@ exports.updateProduct = async (req, res, _) => {
         message: HttpMessage.PRODUCT_NOT_FOUND + _id,
       });
     }
-    res.send(data);
+    return res.status(HttpMessageCode.OK).json({
+      statusCode: HttpMessageCode.OK,
+      message: HttpMessage.DELETE_SINGLE_PRODUCT,
+      data,
+    });
   } catch (error) {
-    res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
+    console.log(error);
+    return res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
   }
 };
 
@@ -148,6 +143,6 @@ exports.deleteProduct = async (req, res, _) => {
       data,
     });
   } catch (error) {
-    res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
+    return res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
   }
 };

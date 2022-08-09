@@ -5,17 +5,29 @@ const userSchema = new mongoose.Schema({
   fullName: { type: String, require: true },
   email: { type: String, require: true },
   password: { type: String, require: true },
-  role: {
-    type: mongoose.Schema.Types.ObjectId,
-    enum: ["USER", "ADMIN"],
-    default: "USER",
+  isVerified: {
+    type: Boolean,
+    default: false,
+  },
+  confirmationCode: {
+    type: String,
+    unique: true,
+  },
+  roles: {
+    type: [
+      {
+        type: String,
+        enum: ["user", "admin"],
+      },
+    ],
+    default: ["user"],
   },
 });
 
 //Token Generater
 userSchema.methods.generateAuthToken = function () {
   const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {
-    expiresIn: "15d",
+    expiresIn: "7d",
   });
   return token;
 };
