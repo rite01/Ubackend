@@ -17,7 +17,9 @@ exports.sendMail = async (email, code) => {
     from: user,
     to: email,
     subject: "Test mail",
-    html: `<a href=http://localhost:8080/api/v1/confirm/${code}> Click here</a>`,
+    html: `
+    <p>Please click below the button and verify your email</p>
+    <a href=http://localhost:8080/api/v1/confirm/${code}> Click here</a>`,
   };
 
   return mailTransporter.sendMail(mailDetails, function (err, data) {

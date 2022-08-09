@@ -9,14 +9,19 @@ const { sendMail } = require("../services/emailsend");
 exports.registerHandler = async (req, res, _) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    const token = jwt.sign({ email: req.body.email }, config.secret);
+    const token = jwt.sign(
+      { email: req.body.email },
+      {
+        expiresIn: "600s",
+      },
+      config.secret
+    );
     if (user)
       return res
         .status(HttpMessageCode.CONFLICT)
         .send({ message: HttpMessage.USER_ALREADY_REGISTER });
     const salt = await bcrypt.genSalt(Number(process.env.SALT));
     const hashPassword = await bcrypt.hash(req.body.password, salt);
-
     const data = await User({
       fullName: req.body.fullName,
       email: req.body.email,

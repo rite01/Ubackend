@@ -4,7 +4,7 @@ const { HttpMessage, HttpMessageCode } = require("../constants");
 const config = require("../config/nodemail");
 var jwt = require("jsonwebtoken");
 
-//user Registration
+//Admin Registration
 exports.adminregisterHandler = async (req, res, _) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -28,14 +28,13 @@ exports.adminregisterHandler = async (req, res, _) => {
       data: data,
     });
   } catch (error) {
-    console.log(error);
     return res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
       .send({ message: HttpMessage.INTERNAL_SERVER_ERROR });
   }
 };
 
-//Login Controller
+//Admin Controller
 exports.adminloginHandler = async (req, res, _) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -56,7 +55,6 @@ exports.adminloginHandler = async (req, res, _) => {
       .status(HttpMessageCode.OK)
       .json({ data: token, message: HttpMessage.ADMIN_LOGIN_SUCCESSFULLY });
   } catch (error) {
-    console.log(error);
     return res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
       .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });
