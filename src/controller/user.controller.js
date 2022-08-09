@@ -27,7 +27,10 @@ exports.registerHandler = async (req, res, _) => {
     await sendMail(req.body.email, newCode);
     return res
       .status(HttpMessageCode.CREATED)
-      .json({ data: data, message: HttpMessage.USER_REGISTER });
+      .json({
+        message: HttpMessage.USER_REGISTER,
+        msg: HttpMessage.PLEASE_VERIFY_EMAIL,
+      });
   } catch (error) {
     console.log(error);
     return res

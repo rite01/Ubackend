@@ -5,7 +5,6 @@ const user = config.user;
 const pass = config.pass;
 
 exports.sendMail = async (email, code) => {
-  console.log("confirmationCode", code);
   let mailTransporter = nodemailer.createTransport({
     service: "Gmail",
     auth: {
@@ -23,7 +22,7 @@ exports.sendMail = async (email, code) => {
 
   return mailTransporter.sendMail(mailDetails, function (err, data) {
     if (err) {
-      console.log("ll", err);
+      console.log("Error", err);
       return err;
     } else {
       return data;

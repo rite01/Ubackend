@@ -7,7 +7,7 @@ const HttpMessage = {
   USER_REGISTER: "User Registration successfully",
   NO_DATA_FOUND: "there is no data",
   USER_FOUND: "user found",
-  USER_NOT_FOUND:"user not found",
+  USER_NOT_FOUND: "user not found",
   PRODUCT_FOUND: "product found",
   EMPTY_FIELDS: "Don't put email and password to be empty",
   MUST_BE_LOGIN: "you must be logged in",
@@ -25,6 +25,7 @@ const HttpMessage = {
   UPDATE_SUCCESSFULLY: "Update product successfully",
   USER_EMAIL_NOT_VERIFIED:
     "Your Email has not been verified. Please click on resend",
+  PLEASE_VERIFY_EMAIL: "Please verify email",
 };
 
 module.exports = { HttpMessage };
