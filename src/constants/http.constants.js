@@ -26,6 +26,9 @@ const HttpMessage = {
   USER_EMAIL_NOT_VERIFIED:
     "Your Email has not been verified. Please click on resend",
   PLEASE_VERIFY_EMAIL: "Please verify email",
+  ADMIN_ALREADY_REGISTER: "Admin already register",
+  ADMIN_REGISTER: "Admin register successfully",
+  ADMIN_LOGIN_SUCCESSFULLY: "Admin Login successfully",
 };
 
 module.exports = { HttpMessage };

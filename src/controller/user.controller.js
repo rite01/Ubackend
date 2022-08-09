@@ -25,14 +25,11 @@ exports.registerHandler = async (req, res, _) => {
     }).save();
     const newCode = data.confirmationCode;
     await sendMail(req.body.email, newCode);
-    return res
-      .status(HttpMessageCode.CREATED)
-      .json({
-        message: HttpMessage.USER_REGISTER,
-        msg: HttpMessage.PLEASE_VERIFY_EMAIL,
-      });
+    return res.status(HttpMessageCode.CREATED).json({
+      message: HttpMessage.USER_REGISTER,
+      msg: HttpMessage.PLEASE_VERIFY_EMAIL,
+    });
   } catch (error) {
-    console.log(error);
     return res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
       .send({ message: HttpMessage.INTERNAL_SERVER_ERROR });
@@ -57,7 +54,6 @@ exports.verifyUser = async (req, res, next) => {
       data: test,
     });
   } catch (error) {
-    console.log(error);
     return res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
       .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });
@@ -90,7 +86,6 @@ exports.loginHandler = async (req, res, _) => {
       .status(HttpMessageCode.OK)
       .json({ data: token, message: HttpMessage.LOGIN_SUCCESSFULLY });
   } catch (error) {
-    console.log(error);
     return res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
       .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });
@@ -110,7 +105,6 @@ exports.getUser = async (req, res, _) => {
         .status(HttpMessageCode.OK)
         .json({ message: HttpMessage.USER_FOUND, data: userList });
   } catch (err) {
-    console.log("err", err);
     return res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
   }
 };

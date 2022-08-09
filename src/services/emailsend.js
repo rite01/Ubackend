@@ -22,7 +22,6 @@ exports.sendMail = async (email, code) => {
 
   return mailTransporter.sendMail(mailDetails, function (err, data) {
     if (err) {
-      console.log("Error", err);
       return err;
     } else {
       return data;

@@ -6,6 +6,11 @@ const Routes = {
     LOGIN: "/login",
     ALLUSER: "/alluser",
   },
+  ADMIN: {
+    DEFAULT: "/",
+    ADMINREGISTER: "/admin/register",
+    ADMINLOGIN: "/admin/login",
+  },
   PRODUCT: {
     DEFAULT: "/",
     POSTCREATE: "/create",
