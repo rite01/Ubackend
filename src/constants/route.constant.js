@@ -6,10 +6,10 @@ const Routes = {
     LOGIN: "/login",
     ALLUSER: "/alluser",
   },
-  ADMIN: {
+  EDUCATOR: {
     DEFAULT: "/",
-    ADMINREGISTER: "/admin/register",
-    ADMINLOGIN: "/admin/login",
+    EDUCATORREGISTER: "/educator/register",
+    EDUCATORLOGIN: "/educator/login",
   },
   PRODUCT: {
     DEFAULT: "/",

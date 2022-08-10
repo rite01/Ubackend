@@ -9,13 +9,7 @@ const { sendMail } = require("../services/emailsend");
 exports.registerHandler = async (req, res, _) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    const token = jwt.sign(
-      { email: req.body.email },
-      {
-        expiresIn: "600s",
-      },
-      config.secret
-    );
+    const token = jwt.sign({ email: req.body.email }, config.secret); 
     if (user)
       return res
         .status(HttpMessageCode.CONFLICT)

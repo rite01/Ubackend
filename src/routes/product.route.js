@@ -10,7 +10,8 @@ const {
   updateProduct,
   getProductByTitle,
 } = require("../controller/product");
-const { verifyToken } = require("../middelwere/authCheck");
+const { verifyToken } = require("../middelwere");
+const { checkRole } = require("../middelwere/checkRole");
 const { uploadFile } = require("../services/multer");
 const { productValidation } = require("../validations");
 
@@ -18,6 +19,7 @@ const { productValidation } = require("../validations");
 productRoute.post(
   PRODUCT.POSTCREATE,
   verifyToken,
+  checkRole("user"),
   uploadFile,
   productValidation,
   productCreate

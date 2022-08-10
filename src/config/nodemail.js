@@ -1,5 +1,5 @@
 module.exports = {
   secret: "bezkoder-secret-key",
-  user: "xxxxxxxxxx",
+  user: "ritesh.thoughtwin@gmail.com",
   pass: "xxxxxxxxx",
 };
