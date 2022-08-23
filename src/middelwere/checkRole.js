@@ -1,9 +1,9 @@
 const { HttpMessage } = require("../constants");
 
 const checkRole =
-  (...roles) =>
+  (...role) =>
   (req, res, next) => {
-    if (!roles.includes(req?.user?.roles)) {
+    if (!role.includes(req?.user?.role)) {
       return res.json({ msg: HttpMessage.YOU_ARE_NOT_AUTHORIZED });
     }
     next();

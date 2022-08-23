@@ -2,7 +2,8 @@ const Routes = {
   AUTH: {
     DEFAULT: "/",
     REGISTER: "/register",
-    VERIFY: "/confirm/:confirmationCode",
+    VERIFY: "/confirm",
+    RESEND: "/resend",
     LOGIN: "/login",
     ALLUSER: "/alluser",
   },

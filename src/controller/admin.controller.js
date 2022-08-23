@@ -6,7 +6,7 @@ const data = [
     fullName: "admin01",
     email: "admin1@gmail.com",
     password: "admin123",
-    roles: "admin",
+    role: "admin",
   },
 ];
 

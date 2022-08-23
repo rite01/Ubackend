@@ -8,7 +8,10 @@ const { sendMail } = require("../services/emailsend");
 exports.educatorRegisterHandler = async (req, res, _) => {
   try {
     const user = await User.findOne({ email: req.body.email });
-    const token = jwt.sign({ email: req.body.email }, config.secret);
+    var token = Math.random();
+    token = token * 1000000;
+    token = parseInt(token);
+    console.log(token);
     if (user)
       return res
         .status(HttpMessageCode.CONFLICT)
@@ -21,7 +24,7 @@ exports.educatorRegisterHandler = async (req, res, _) => {
       password: hashPassword,
       confirmationCode: token,
       isVerified: false,
-      roles: "educator",
+      role: "educator",
     }).save();
     const newCode = data.confirmationCode;
     const dataa = await sendMail(req.body.email, newCode);

@@ -21,8 +21,9 @@ exports.registerHandler = async (req, res, _) => {
   try {
     const { email } = req.body;
     const user = await User.findOne({ email });
-    const token = jwt.sign({ email: req.body.email }, config.secret);
-    console.log("...", user, token);
+    var token = Math.random();
+    token = token * 1000000;
+    token = parseInt(token);
     if (user)
       return res
         .status(HttpMessageCode.CONFLICT)
@@ -36,7 +37,6 @@ exports.registerHandler = async (req, res, _) => {
       confirmationCode: token,
     }).save();
     const newCode = data.confirmationCode;
-    // TODO: email send not exist wit jwt token....
     await sendMail(req.body.email, newCode);
     return res.status(HttpMessageCode.CREATED).json({
       message: HttpMessage.PLEASE_VERIFY_EMAIL,
@@ -59,14 +59,12 @@ exports.registerHandler = async (req, res, _) => {
 
 exports.verifyUser = async (req, res, next) => {
   try {
-    const test = await User.findOne({
-      confirmationCode: req.params.confirmationCode,
-    });
-    if (!test) {
+    const { confirmationCode } = req.body;
+    const test = await User.findOne({ confirmationCode: confirmationCode });
+    if (!test)
       return res
-        .status(HttpMessageCode.NOT_FOUND)
-        .send({ message: HttpMessage.USER_NOT_FOUND });
-    }
+        .status(HttpMessageCode.UNAUTHORIZED)
+        .send({ message: "invalid otp" });
     test.isVerified = true;
     await test.save();
     return res.json({
@@ -75,6 +73,27 @@ exports.verifyUser = async (req, res, next) => {
       data: test,
     });
   } catch (error) {
+    console.log(error);
+    return res
+      .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
+      .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });
+  }
+};
+
+exports.resendOtp = async (req, res, next) => {
+  try {
+    var token = Math.random();
+    token = token * 1000000;
+    token = parseInt(token);
+    const user = await User.findOne().sort({ _id: -1 });
+    const email = user.email;
+    const rrr = await User.findOne({ email });
+    console.log(rrr);
+
+    console.log(email);
+    await sendMail(user.email, token);
+  } catch (error) {
+    console.log(error);
     return res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
       .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });
