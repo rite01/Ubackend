@@ -1,12 +1,10 @@
-const jwt = require("jsonwebtoken");
-const { User } = require("../models/user");
+const { HttpMessage } = require("../constants");
 
 const checkRole =
   (...roles) =>
   (req, res, next) => {
-    console.log(roles, ">>>>>.", req.user);
     if (!roles.includes(req?.user?.roles)) {
-      return res.json({ msg: "defghjkl" });
+      return res.json({ msg: HttpMessage.YOU_ARE_NOT_AUTHORIZED });
     }
     next();
   };

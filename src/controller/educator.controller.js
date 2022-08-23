@@ -5,7 +5,6 @@ const config = require("../config/nodemail");
 var jwt = require("jsonwebtoken");
 const { sendMail } = require("../services/emailsend");
 
-//Admin Registration
 exports.educatorRegisterHandler = async (req, res, _) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -31,6 +30,7 @@ exports.educatorRegisterHandler = async (req, res, _) => {
       msg: HttpMessage.PLEASE_VERIFY_EMAIL,
     });
   } catch (error) {
+    console.log(error);
     return res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
       .send({ message: HttpMessage.INTERNAL_SERVER_ERROR });
@@ -61,7 +61,6 @@ exports.verifyUser = async (req, res, next) => {
   }
 };
 
-//Admin Controller
 exports.educatorLoginHandler = async (req, res, _) => {
   try {
     const user = await User.findOne({ email: req.body.email });
@@ -82,12 +81,13 @@ exports.educatorLoginHandler = async (req, res, _) => {
       return res
         .status(HttpMessageCode.UNAUTHORIZED)
         .json({ message: HttpMessage.INVALID_EMAIL });
-    const educatorToken = user.generateEducatorToken();
+    const educatorToken = user.generateAuthToken();
     return res.status(HttpMessageCode.OK).json({
       educatortoken: educatorToken,
       message: HttpMessage.EDUCATOR_LOGIN_SUCCESSFULLY,
     });
   } catch (error) {
+    console.log(error);
     return res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
       .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });

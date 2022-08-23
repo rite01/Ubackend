@@ -47,9 +47,10 @@ exports.productCreate = async (req, res, _) => {
       data: productCreate,
     });
   } catch (error) {
+    console.log("error", error);
     return res
       .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
-      .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });
+      .json({ message: error });
   }
 };
 

@@ -1,5 +1,4 @@
 const { default: mongoose } = require("mongoose");
-
 module.exports = () => {
   const connectionParams = {
     useNewUrlParser: true,
@@ -10,5 +9,5 @@ module.exports = () => {
     console.log("Connection SuccessFully............");
   } catch (error) {
     console.log(error, "Could not connect to database...........");
-  } 
+  }
 };

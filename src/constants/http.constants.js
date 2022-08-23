@@ -29,6 +29,7 @@ const HttpMessage = {
   EDUCATOR_ALREADY_REGISTER: "email already register",
   EDUCATOR_REGISTER: "Educator register successfully",
   EDUCATOR_LOGIN_SUCCESSFULLY: "Login successfully",
+  YOU_ARE_NOT_AUTHORIZED: "You are not Authorized user",
 };
 
 module.exports = { HttpMessage };

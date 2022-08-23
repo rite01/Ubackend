@@ -20,9 +20,17 @@
     "joi-password-complexity": "^5.1.0",
     "jsonwebtoken": "^8.5.1",
     "localtunnel": "^2.0.2",
+    "logger": "^0.0.1",
     "mongoose": "^6.2.10",
     "multer": "^1.4.4",
+    "node-seeder": "^1.1.2",
     "nodemailer": "^6.7.7",
-    "nodemon": "^2.0.15"
+    "nodemon": "^2.0.15",
+    "simple-node-logger": "^21.8.12",
+    "winston": "^3.8.1"
+  },
+  "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
+    "@types/jsonwebtoken": "^8.5.8"
   }
 }

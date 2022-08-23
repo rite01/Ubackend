@@ -1,5 +1,4 @@
 const { Cart } = require("../models/cartModel");
-const { Product } = require("../models/productModel");
 const { HttpMessage, HttpMessageCode } = require("../constants");
 
 exports.addCart = async (req, res, _) => {

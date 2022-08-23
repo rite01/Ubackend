@@ -6,6 +6,10 @@ const Routes = {
     LOGIN: "/login",
     ALLUSER: "/alluser",
   },
+  ADMIN: {
+    DEFAULT: "/",
+    LOGIN: "/admin/login",
+  },
   EDUCATOR: {
     DEFAULT: "/",
     EDUCATORREGISTER: "/educator/register",

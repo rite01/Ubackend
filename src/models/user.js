@@ -27,12 +27,6 @@ userSchema.methods.generateAuthToken = function () {
   });
   return token;
 };
-userSchema.methods.generateEducatorToken = function () {
-  const token = jwt.sign({ _id: this._id }, process.env.JWTPRIVATEKEY, {
-    expiresIn: "2d",
-  });
-  return token;
-};
 
 const User = mongoose.model("user", userSchema);
 

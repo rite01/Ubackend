@@ -19,7 +19,7 @@ const { productValidation } = require("../validations");
 productRoute.post(
   PRODUCT.POSTCREATE,
   verifyToken,
-  checkRole("user"),
+  checkRole("educator"),
   uploadFile,
   productValidation,
   productCreate

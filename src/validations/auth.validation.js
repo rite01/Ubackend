@@ -1,6 +1,15 @@
 const joi = require("joi");
 const passwordComplexity = require("joi-password-complexity");
 
+/**
+ *
+ * @param {String} fullName
+ * @param {String} email
+ * @param {String} password
+ * @returns {message}
+ * @description joi validation function
+ */
+
 exports.userValidation = (req, res, next) => {
   const schema = joi.object({
     fullName: joi.string().required().label("Full Name"),
