@@ -2,7 +2,7 @@ const Routes = {
   AUTH: {
     DEFAULT: "/",
     REGISTER: "/register",
-    VERIFY: "/confirm",
+    VERIFY: "/otpverify",
     RESEND: "/resend",
     LOGIN: "/login",
     ALLUSER: "/alluser",
@@ -13,6 +13,8 @@ const Routes = {
   },
   EDUCATOR: {
     DEFAULT: "/",
+    VERIFY_OTP: "/educator/otpverify",
+    RESEND_OTP: "/educator/resend",
     EDUCATORREGISTER: "/educator/register",
     EDUCATORLOGIN: "/educator/login",
   },
@@ -20,10 +22,10 @@ const Routes = {
     DEFAULT: "/",
     POSTCREATE: "/create",
     GETPRODUCT: "/get/product",
-    GETPRODUCTBYID: "/get/product/:id",
     GETPRODUCTBYTITLE: "/get/product/bytitle/:navtitle",
-    DELETEPRODUCT: "/delete/product/:id",
+    GETPRODUCTBYID: "/get/product/:id",
     UPDATEPRODUCT: "/update/product/:id",
+    DELETEPRODUCT: "/delete/product/:id",
   },
   CART: {
     DEFAULT: "/",

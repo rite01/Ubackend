@@ -1,5 +1,13 @@
 const { HttpMessage } = require("../constants");
 
+/**
+ *
+ * @param {String} role
+ * @returns {message}
+ * @access public
+ * @discription Role check middelwere.
+ */
+
 const checkRole =
   (...role) =>
   (req, res, next) => {

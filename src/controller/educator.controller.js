@@ -1,17 +1,25 @@
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const { HttpMessage, HttpMessageCode } = require("../constants");
-const config = require("../config/nodemail");
-var jwt = require("jsonwebtoken");
 const { sendMail } = require("../services/emailsend");
 
+/**
+ * route api/v1/educator/register
+ *
+ * @param {string} fullName
+ * @param {string} email
+ * @param {string} password
+ * @returns {message}
+ * @access public
+ * @discription educator Registration
+ */
 exports.educatorRegisterHandler = async (req, res, _) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const { email } = req.body;
+    const user = await User.findOne({ email });
     var token = Math.random();
     token = token * 1000000;
     token = parseInt(token);
-    console.log(token);
     if (user)
       return res
         .status(HttpMessageCode.CONFLICT)
@@ -23,14 +31,12 @@ exports.educatorRegisterHandler = async (req, res, _) => {
       email: req.body.email,
       password: hashPassword,
       confirmationCode: token,
-      isVerified: false,
       role: "educator",
     }).save();
     const newCode = data.confirmationCode;
-    const dataa = await sendMail(req.body.email, newCode);
+    await sendMail(req.body.email, newCode);
     return res.status(HttpMessageCode.CREATED).json({
-      message: HttpMessage.EDUCATOR_REGISTER,
-      msg: HttpMessage.PLEASE_VERIFY_EMAIL,
+      message: HttpMessage.PLEASE_VERIFY_EMAIL,
     });
   } catch (error) {
     console.log(error);
@@ -40,29 +46,14 @@ exports.educatorRegisterHandler = async (req, res, _) => {
   }
 };
 
-exports.verifyUser = async (req, res, next) => {
-  try {
-    const test = await User.findOne({
-      confirmationCode: req.params.confirmationCode,
-    });
-    if (!test) {
-      return res
-        .status(HttpMessageCode.NOT_FOUND)
-        .send({ message: HttpMessage.USER_NOT_FOUND });
-    }
-    test.isVerified = true;
-    await test.save();
-    return res.json({
-      statusCode: HttpMessageCode.CREATED,
-      message: HttpMessage.OK,
-      data: test,
-    });
-  } catch (error) {
-    return res
-      .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
-      .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });
-  }
-};
+/**
+ * api end point api/v1//educator/login
+ *
+ * @param {String} email
+ * @param {String} password
+ * @access public
+ * @discription Educator token verification controller.
+ */
 
 exports.educatorLoginHandler = async (req, res, _) => {
   try {

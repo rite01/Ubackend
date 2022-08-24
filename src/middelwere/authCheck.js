@@ -2,6 +2,14 @@ const jwt = require("jsonwebtoken");
 const { HttpMessageCode, HttpMessage } = require("../constants");
 const { User } = require("../models/user");
 
+/**
+ *
+ * @param {String} authorization
+ * @returns {message}
+ * @access public
+ * @discription Token verify "auth check" middelwere.
+ */
+
 const verifyToken = (req, res, next) => {
   const { authorization } = req.headers;
   if (!authorization) {

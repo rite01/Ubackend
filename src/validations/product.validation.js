@@ -1,5 +1,22 @@
 const joi = require("joi");
 
+/**
+ *
+ * @param {String} heading
+ * @param {String} title
+ * @param {Number} price
+ * @param {String} image
+ * @param {String} courseTitle
+ * @param {Number} updateDate
+ * @param {String} discription
+ * @param {String} courseAuther
+ * @param {String} aboutProduct
+ * @param {String} courseSummry
+ * @param {Number} hours
+ * @returns {message}
+ * @description joi validation product
+ */
+
 exports.productValidation = (req, res, next) => {
   const productSchema = joi.object({
     heading: joi.string().required().label("Heading"),

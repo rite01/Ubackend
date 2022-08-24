@@ -1,6 +1,15 @@
 const { Cart } = require("../models/cartModel");
 const { HttpMessage, HttpMessageCode } = require("../constants");
 
+/**
+ * api end point api/v1/addcart
+ *
+ * @param {String} userId
+ * @param {String} productId
+ * @returns {message}
+ * @access public
+ * @discription add to cart controller.
+ */
 exports.addCart = async (req, res, _) => {
   try {
     const { id: userId } = req.user;
@@ -41,6 +50,15 @@ exports.addCart = async (req, res, _) => {
   }
 };
 
+/**
+ * api end point api/v1/getcart
+ *
+ * @param {String} userId
+ * @returns {message}
+ * @access public
+ * @discription get cart controller.
+ */
+
 exports.getCartProduct = async (req, res, _) => {
   try {
     const cartData = await Cart.find({}).populate("productId");
@@ -49,6 +67,16 @@ exports.getCartProduct = async (req, res, _) => {
     return res.status(HttpMessageCode.BAD_REQUEST).json({ error: err.message });
   }
 };
+
+/**
+ * api end point api/v1/removecart/:id
+ *
+ * @param {String} userId
+ * @param {String} _id
+ * @returns {message}
+ * @access public
+ * @discription Remove cart product by Id update cart model.
+ */
 
 exports.removeCart = async (req, res, _) => {
   try {

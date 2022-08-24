@@ -18,8 +18,7 @@ exports.sendMail = async (email, newCode) => {
     to: email,
     subject: "Test mail",
     html: `
-    <p>OTP for email verification ${newCode}</p>
-    <a href=http://localhost:5000/api/v1/confirm>code</a>`,
+    <p>OTP for email verification ${newCode}</p>`,
   };
 
   return mailTransporter.sendMail(mailDetails, function (err, data) {
@@ -27,7 +26,6 @@ exports.sendMail = async (email, newCode) => {
       console.log(err);
       return err;
     } else {
-      console.log("email send successfully");
       return data;
     }
   });

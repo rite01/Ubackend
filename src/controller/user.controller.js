@@ -1,13 +1,11 @@
 const { User } = require("../models/user");
 const bcrypt = require("bcrypt");
 const { HttpMessage, HttpMessageCode } = require("../constants");
-const config = require("../config/nodemail");
-var jwt = require("jsonwebtoken");
 const { sendMail } = require("../services/emailsend");
 
-//user Registration
-// route api/v1/register
 /**
+ * user Registration
+ * route api/v1/register
  *
  * @param {string} fullName
  * @param {string} email
@@ -17,6 +15,10 @@ const { sendMail } = require("../services/emailsend");
  * @discription user registration
  */
 
+// function AddMinutesToDate(date, minutes) {
+//   return new Date(date.getTime() + minutes * 60000);
+// }
+
 exports.registerHandler = async (req, res, _) => {
   try {
     const { email } = req.body;
@@ -24,6 +26,7 @@ exports.registerHandler = async (req, res, _) => {
     var token = Math.random();
     token = token * 1000000;
     token = parseInt(token);
+    const now = new Date();
     if (user)
       return res
         .status(HttpMessageCode.CONFLICT)
@@ -50,6 +53,8 @@ exports.registerHandler = async (req, res, _) => {
 };
 
 /**
+ *  route api/v1/confirm
+ *  OTP verification controller
  *
  * @param {string} confirmationCode
  * @returns {message}
@@ -80,18 +85,35 @@ exports.verifyUser = async (req, res, next) => {
   }
 };
 
+/**
+ * end point api/v1/resend
+ * resend otp api
+ *
+ * @param {Number} confirmationCode
+ * @returns {message}
+ * @access public
+ * @discription user token verification controller.
+ */
+
 exports.resendOtp = async (req, res, next) => {
   try {
     var token = Math.random();
     token = token * 1000000;
     token = parseInt(token);
     const user = await User.findOne().sort({ _id: -1 });
-    const email = user.email;
-    const rrr = await User.findOne({ email });
-    console.log(rrr);
-
-    console.log(email);
+    const _id = user.id;
+    await User.findByIdAndUpdate(
+      _id,
+      {
+        confirmationCode: token,
+      },
+      { new: true }
+    );
     await sendMail(user.email, token);
+    return res.json({
+      statusCode: HttpMessageCode.CREATED,
+      message: "resend otp successfully",
+    });
   } catch (error) {
     console.log(error);
     return res
@@ -100,11 +122,12 @@ exports.resendOtp = async (req, res, next) => {
   }
 };
 
-//Login Controller
-// api end point api/v1/login
 /**
+ *Login Controller
+ * api end point api/v1/login
  *
- * @param {string} confirmationCode
+ * @param {String} email
+ * @param {String} password
  * @returns {message}
  * @access public
  * @discription user token verification controller.
@@ -142,9 +165,9 @@ exports.loginHandler = async (req, res, _) => {
   }
 };
 
-// Get user Api
-// api route api/v1/login
 /**
+ * Get user Api
+ * api route api/v1/login
  *
  * @param {string} email
  * @param {string} password

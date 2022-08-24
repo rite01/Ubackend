@@ -3,7 +3,26 @@ const { HttpMessage, HttpMessageCode } = require("../constants");
 const cloudinary = require("../services/clodinary");
 const { ProductDetail } = require("../models/productDetail");
 
-//create Product
+/**
+ * route api/v1/create
+ *
+ * @param {string} heading
+ * @param {string} title
+ * @param {Number} price
+ * @param {Number} updateDate
+ * @param {Boolean} bestSeller
+ * @param {string} image
+ * @param {string} courseTitle
+ * @param {string} discription
+ * @param {Number} numReview
+ * @param {string} discription
+ * @param {string} courseSummry
+ * @param {string} aboutProduct
+ * @returns {message}
+ * @access public
+ * @discription Product Create Controller
+ */
+
 exports.productCreate = async (req, res, _) => {
   try {
     const image = req.file.path;
@@ -54,7 +73,14 @@ exports.productCreate = async (req, res, _) => {
   }
 };
 
-//Get product Api
+/**
+ * Route api/v1/get/product
+ *
+ * @param {String} detail
+ * @access public
+ * @returns {message}
+ * @discription Get product Api controller.
+ */
 exports.getProduct = async (req, res, _) => {
   try {
     const productList = await Product.find({}).populate("detail");
@@ -71,7 +97,14 @@ exports.getProduct = async (req, res, _) => {
   }
 };
 
-//Get Product By Title
+/**
+ * Route api/v1/get/product/bytitle/:navtitle
+ *
+ * @param {String} navTitle
+ * @access public
+ * @returns {message}
+ * @discription Get Product By Title controller.
+ */
 exports.getProductByTitle = async (req, res, _) => {
   try {
     const navTitle = req.params.navtitle;
@@ -86,7 +119,14 @@ exports.getProductByTitle = async (req, res, _) => {
   }
 };
 
-//Get Single Product
+/**
+ * Route api/v1/get/product/:id
+ *
+ * @param {String} id
+ * @access public
+ * @returns {message}
+ * @discription Get Single Product controller.
+ */
 exports.getSingleProduct = async (req, res, _) => {
   try {
     const id = req.params.id;
@@ -101,7 +141,14 @@ exports.getSingleProduct = async (req, res, _) => {
   }
 };
 
-//update Product
+/**
+ * Route api/v1/update/product/:id
+ *
+ * @param {String} id
+ * @access public
+ * @returns {message}
+ * @discription update Product controller.
+ */
 exports.updateProduct = async (req, res, _) => {
   try {
     const id = req.params.id;
@@ -131,7 +178,14 @@ exports.updateProduct = async (req, res, _) => {
   }
 };
 
-//Delete Product Api
+/**
+ * Route api/v1/get/product/:id
+ *
+ * @param {String} _id
+ * @access public
+ * @returns {message}
+ * @discription Delete Single Product controller.
+ */
 exports.deleteProduct = async (req, res, _) => {
   try {
     const _id = req.params.id;
