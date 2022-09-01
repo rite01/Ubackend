@@ -15,34 +15,34 @@ const { sendMail } = require("../services/emailsend");
  */
 exports.educatorRegisterHandler = async (req, res, _) => {
   try {
-    const { email } = req.body;
+    const { email, fullName, password } = req.body;
     const user = await User.findOne({ email });
-    var token = Math.random();
-    token = token * 1000000;
-    token = parseInt(token);
     if (user)
-      return res
-        .status(HttpMessageCode.CONFLICT)
-        .send({ message: HttpMessage.EDUCATOR_ALREADY_REGISTER });
-    const salt = await bcrypt.genSalt(Number(process.env.SALT));
-    const hashPassword = await bcrypt.hash(req.body.password, salt);
+      return next(
+        new ApiError(
+          HttpMessageCode.CONFLICT,
+          HttpMessage.EDUCATOR_ALREADY_REGISTER
+        )
+      );
     const data = await User({
-      fullName: req.body.fullName,
-      email: req.body.email,
-      password: hashPassword,
-      confirmationCode: token,
+      fullName,
+      email,
+      password,
       role: "educator",
     }).save();
     const newCode = data.confirmationCode;
-    await sendMail(req.body.email, newCode);
-    return res.status(HttpMessageCode.CREATED).json({
-      message: HttpMessage.PLEASE_VERIFY_EMAIL,
-    });
+    await sendMail(email, newCode);
+    return next(
+      new ApiError(HttpMessageCode.CREATED, HttpMessage.PLEASE_VERIFY_EMAIL)
+    );
   } catch (error) {
     console.log(error);
-    return res
-      .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
-      .send({ message: HttpMessage.INTERNAL_SERVER_ERROR });
+    return next(
+      new ApiError(
+        HttpMessageCode.INTERNAL_SERVER_ERROR,
+        HttpMessage.INTERNAL_SERVER_ERROR
+      )
+    );
   }
 };
 
@@ -57,33 +57,30 @@ exports.educatorRegisterHandler = async (req, res, _) => {
 
 exports.educatorLoginHandler = async (req, res, _) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const { email, password } = req.body;
+    const user = await User.findOne({ email });
+    if (!user || !user.isPasswordMatched(password))
+      return next(
+        new ApiError(HttpMessageCode.UNAUTHORIZED, HttpMessage.INVALID_EMAIL)
+      );
     if (!user.isVerified) {
       return res.status(HttpMessageCode.NOT_FOUND).send({
         message: HttpMessage.USER_EMAIL_NOT_VERIFIED,
       });
     }
-    if (!user)
-      return res
-        .status(HttpMessageCode.UNAUTHORIZED)
-        .send({ message: HttpMessage.INVALID_EMAIL });
-    const validPassword = await bcrypt.compare(
-      req.body.password,
-      user.password
-    );
-    if (!validPassword)
-      return res
-        .status(HttpMessageCode.UNAUTHORIZED)
-        .json({ message: HttpMessage.INVALID_EMAIL });
     const educatorToken = user.generateAuthToken();
-    return res.status(HttpMessageCode.OK).json({
-      educatortoken: educatorToken,
-      message: HttpMessage.EDUCATOR_LOGIN_SUCCESSFULLY,
-    });
+    return next(
+      new ApiError(
+        HttpMessageCode.OK,
+        HttpMessage.EDUCATOR_LOGIN_SUCCESSFULLY,
+        {
+          educatortoken: educatorToken,
+        }
+      )
+    );
   } catch (error) {
-    console.log(error);
-    return res
-      .status(HttpMessageCode.INTERNAL_SERVER_ERROR)
-      .json({ message: HttpMessage.INTERNAL_SERVER_ERROR });
+    return next(
+      new ApiError(HttpMessageCode.INTERNAL_SERVER_ERROR, error.message)
+    );
   }
 };

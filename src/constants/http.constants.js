@@ -23,6 +23,10 @@ const HttpMessage = {
   NO_DATA_FOUND_FROM_THIS_ID: "no cart details found with this id ",
   PRODUCT_NOT_FOUND: "product not found",
   UPDATE_SUCCESSFULLY: "Update product successfully",
+  EMAIL_VERIFIED: "email verified",
+  INVALID_OTP: "invalid otp",
+  OTP_RESEND: "resend otp successfully",
+  ALREADY_VERIFY: "user already verify",
   USER_EMAIL_NOT_VERIFIED:
     "Your Email has not been verified. Please click on resend",
   PLEASE_VERIFY_EMAIL: "Please verify email",
